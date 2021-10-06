@@ -71,5 +71,13 @@ COPY --from=build /opt/build/lib /opt/app/lib
 COPY --from=dependencies /opt/build/node_modules /opt/app/node_modules
 COPY ./public /opt/app/public
 
+### set s3 creds
+# TODO: allow s3 fullaccess permissions from eks nodes
+ARG AWS_ACCESS_KEY_ID
+ARG AWS_SECRET_ACCESS_KEY
+ENV AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
+ENV AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
+
+
 ENTRYPOINT ["/tini", "-g", "--"]
 CMD [ "node", "lib/index.js" ]
