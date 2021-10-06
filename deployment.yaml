@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: commuter
+  namespace: ledgerhub
+  labels:
+    app: commuter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: commuter-pod
+  template:
+    metadata:
+      labels:
+        app: commuter-pod
+    spec:
+      containers:
+        - name: commuter
+          image: 777486332181.dkr.ecr.us-east-1.amazonaws.com/commuter:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 4000
+          env:
+            - name: COMMUTER_STORAGE_BACKEND
+              value: "s3"
+            - name: COMMUTER_BUCKET
+              value: "ledger-dstmp" 
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: commuter-service
+  namespace: ledgerhub
+spec:
+  ports:
+    - port: 80
+      targetPort: 4000
+      protocol: TCP
+  type: ClusterIP
+  selector:
+    app: commuter-pod
+
