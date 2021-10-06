@@ -146,8 +146,14 @@ been contributed. Instructions are below.
 Note: there is no officially published Docker image at this time, you should publish it to your own
 image registry.
 
-1. Build and tag image `docker build --tag commuter:latest .`
-1. Image can be executed as follows:
+1. Build and tag image:
+
+```bash
+docker build --tag commuter:latest --build-arg AWS_ACCESS_KEY_ID='key here' --build-arg AWS_SECRET_ACCESS_KEY='key here' .
+```
+
+
+2. Image can be executed as follows:
 <pre>
 docker run \
 --publish 4000:4000 \
@@ -155,3 +161,20 @@ docker run \
 --env COMMUTER_LOCAL_STORAGE_BASEDIRECTORY=/examples \
 commuter:latest
 </pre>
+
+3. Push to ECR
+
+```bash
+# sign in
+aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 777486332181.dkr.ecr.us-east-1.amazonaws.com
+
+# build and tag
+docker build --tag commuter:latest --build-arg AWS_ACCESS_KEY_ID='key here' --build-arg AWS_SECRET_ACCESS_KEY='key here' .
+
+# tag for ECR
+docker tag commuter:latest 777486332181.dkr.ecr.us-east-1.amazonaws.com/commuter:latest
+
+# push
+docker push 777486332181.dkr.ecr.us-east-1.amazonaws.com/commuter:latest
+```
+
