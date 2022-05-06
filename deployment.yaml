@@ -25,7 +25,7 @@ spec:
             - name: COMMUTER_STORAGE_BACKEND
               value: "s3"
             - name: COMMUTER_BUCKET
-              value: "ledger-dstmp" 
+              value: "ledger-notebooks" 
 
 ---
 
